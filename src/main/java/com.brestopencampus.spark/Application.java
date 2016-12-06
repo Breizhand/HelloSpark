@@ -30,32 +30,37 @@ public class Application {
      */
     JSonTransformer jsonT = new JSonTransformer();
     get("/json/Beers", (req, res) -> dao.all(), jsonT);
-    get("/json/Beers/:id", (req, res) -> dao.find(req.params("id")));
+    get("/json/Beers/:id", "application/json",  (req, res) ->  dao.find(req.params("id"))
+        , jsonT);
 
-    post("/json/Beers", (ICRoute) (req) -> dao.add(new Beer(req.queryParams("name"),
-            Float.parseFloat(req.queryParams("alcohol")))), jsonT);
+    post("/json/Beers", (req, res) -> {
+          Beer b = dao.add(new Beer(req.queryParams("name"), Float.parseFloat(req.queryParams("alcohol"))));
+          res.status(201);
+          return b;
+    }, jsonT);
     delete("/json/Beers/:id", (ICRoute) (req) -> dao.remove(req.params("id")));
   }
 
   private static DB mongo() throws Exception {
-    String host = System.getenv("MONGODB_DB_HOST");
+    String host = "127.0.0.1";//System.getenv("MONGODB_DB_HOST");
     if (host == null) {
       MongoClient mongoClient = new MongoClient("localhost");
       return mongoClient.getDB("todoapp");
     }
-    int port = Integer.parseInt(System.getenv("MONGODB_DB_PORT"));
-    String dbname = System.getenv("HelloSpark");
+    int port = 27017;//Integer.parseInt(System.getenv("MONGODB_DB_PORT"));
+    String dbname = "HelloSpark";//System.getenv("HelloSpark");
     String username = System.getenv("MONGODB_DB_USERNAME");
     String password = System.getenv("MONGODB_DB_PASSWORD");
     MongoClientOptions mongoClientOptions = MongoClientOptions.builder().build();
     MongoClient mongoClient = new MongoClient(new ServerAddress(host, port), mongoClientOptions);
     mongoClient.setWriteConcern(WriteConcern.SAFE);
     DB db = mongoClient.getDB(dbname);
+    return db;/*
     if (db.authenticate(username, password.toCharArray())) {
       return db;
     } else {
       throw new RuntimeException("Not able to authenticate with MongoDB");
-    }
+    }*/
   }
 
 

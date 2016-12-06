@@ -37,9 +37,12 @@ public class BeerDao {
     return new Beer((BasicDBObject) collection.findOne(new BasicDBObject("_id", new ObjectId(id))));
   }
 
-  public void add(Beer beer) {
-    collection.insert(new BasicDBObject("name", beer.getName())
-            .append("alcohol", beer.getAlcohol()));
+  public Beer add(Beer beer) {
+    DBObject doc = new BasicDBObject("name", beer.getName())
+            .append("alcohol", beer.getAlcohol());
+    collection.insert(doc);
+    beer.setId(doc.get("_id").toString());
+    return beer;
   }
 
   public void remove(String id) {

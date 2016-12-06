@@ -1,11 +1,12 @@
 package com.brestopencampus.spark.model;
 
-import com.sun.corba.se.spi.ior.ObjectId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import spark.Redirect;
 import java.util.*;
 import com.mongodb.*;
+import org.bson.types.ObjectId;
+
 
 
 /**
@@ -21,6 +22,10 @@ public class Beer {
 
   public String getId() {
     return id;
+  }
+
+  public void setId(String id){
+    this.id = id;
   }
 
   public Beer(BasicDBObject dbObject) {
