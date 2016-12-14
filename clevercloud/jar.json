@@ -1,4 +1,8 @@
 {
+   "build": {
+    "type": "maven",
+    "goal": "package"
+  },
   "deploy": {
     "jarName": "target/HelloSpark-1.0-SNAPSHOT.jar"
   }
