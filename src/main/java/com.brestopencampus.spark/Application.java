@@ -19,7 +19,7 @@ public class Application {
   public static void main(String[] args) throws Exception {
 
     exception(Exception.class, (e, req, res) -> e.printStackTrace()); // print all exceptions
-    port(9999);
+    port(8080);
 
     BeerDao dao = new BeerDao(mongo());
 
