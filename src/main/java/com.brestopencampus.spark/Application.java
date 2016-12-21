@@ -29,7 +29,13 @@ public class Application {
      * REST Part
      */
     JSonTransformer jsonT = new JSonTransformer();
-    get("/json/Beers", (req, res) -> dao.all(), jsonT);
+    get("/json/Beers", (req, res) -> {
+      if (req.queryParams("name") != null) {
+        return dao.find()
+      } else {
+       return  dao.all();
+      }
+    }, jsonT);
     get("/json/Beers/:id", "application/json",  (req, res) ->  dao.find(req.params("id"))
         , jsonT);
 
@@ -42,25 +48,25 @@ public class Application {
   }
 
   private static DB mongo() throws Exception {
-    String host = "127.0.0.1";//System.getenv("MONGODB_DB_HOST");
+    String host = System.getenv("MONGODB_ADDON_HOST");
     if (host == null) {
       MongoClient mongoClient = new MongoClient("localhost");
       return mongoClient.getDB("todoapp");
     }
-    int port = 27017;//Integer.parseInt(System.getenv("MONGODB_DB_PORT"));
-    String dbname = "HelloSpark";//System.getenv("HelloSpark");
-    String username = System.getenv("MONGODB_DB_USERNAME");
-    String password = System.getenv("MONGODB_DB_PASSWORD");
+    int port = Integer.parseInt(System.getenv("MONGODB_ADDON_PORT"));
+    String dbname = System.getenv("MONGODB_ADDON_DB");
+    String username = System.getenv("MONGODB_ADDON_USER");
+    String password = System.getenv("MONGODB_ADDON_PASSWORD");
     MongoClientOptions mongoClientOptions = MongoClientOptions.builder().build();
     MongoClient mongoClient = new MongoClient(new ServerAddress(host, port), mongoClientOptions);
     mongoClient.setWriteConcern(WriteConcern.SAFE);
     DB db = mongoClient.getDB(dbname);
-    return db;/*
+
     if (db.authenticate(username, password.toCharArray())) {
       return db;
     } else {
       throw new RuntimeException("Not able to authenticate with MongoDB");
-    }*/
+    }
   }
 
 
