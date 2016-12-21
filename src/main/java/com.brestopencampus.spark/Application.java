@@ -29,9 +29,9 @@ public class Application {
      * REST Part
      */
     JSonTransformer jsonT = new JSonTransformer();
-    get("/json/Beers", (req, res) -> {
+    get("/json/Beers", (req, res) ->
       return  dao.all()
-    }, jsonT);
+    , jsonT);
     get("/json/Beers/:id", "application/json",  (req, res) ->  dao.find(req.params("id"))
         , jsonT);
 
