@@ -30,11 +30,7 @@ public class Application {
      */
     JSonTransformer jsonT = new JSonTransformer();
     get("/json/Beers", (req, res) -> {
-      if (req.queryParams("name") != null) {
-        return dao.find()
-      } else {
-       return  dao.all();
-      }
+      return  dao.all()
     }, jsonT);
     get("/json/Beers/:id", "application/json",  (req, res) ->  dao.find(req.params("id"))
         , jsonT);
