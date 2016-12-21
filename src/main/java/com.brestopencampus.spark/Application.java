@@ -29,16 +29,14 @@ public class Application {
      * REST Part
      */
     JSonTransformer jsonT = new JSonTransformer();
-    get("/json/Beers", (req, res) ->
-      return  dao.all()
-    , jsonT);
+    get("/json/Beers", (req, res) -> dao.all(), jsonT);
     get("/json/Beers/:id", "application/json",  (req, res) ->  dao.find(req.params("id"))
-        , jsonT);
+            , jsonT);
 
     post("/json/Beers", (req, res) -> {
-          Beer b = dao.add(new Beer(req.queryParams("name"), Float.parseFloat(req.queryParams("alcohol"))));
-          res.status(201);
-          return b;
+      Beer b = dao.add(new Beer(req.queryParams("name"), Float.parseFloat(req.queryParams("alcohol"))));
+      res.status(201);
+      return b;
     }, jsonT);
     delete("/json/Beers/:id", (ICRoute) (req) -> dao.remove(req.params("id")));
   }
